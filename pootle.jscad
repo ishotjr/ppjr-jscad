@@ -1,5 +1,7 @@
 
-// Pootle Piglet Jr. v0.0.3
+// Pootle Piglet Jr. v0.0.4
+
+const DEBUG = true;
 
 var w = 50;
 var l = 60;
@@ -12,11 +14,18 @@ function main() {
 }
 
 function pootle() {
-    return union(
-        body(h/2),
-        head(h/4),
-        tail(h/8),
-        legs(w/2, h/2, legR));
+    let pig = union(body(h/2),
+                    head(h/4),
+                    tail(h/8),
+                    legs(w/2, h/2, legR));
+
+    // take the lid off for debug
+    if (DEBUG) {
+        let cutaway = cube({size: [w*1.1,l*0.8,h*0.3]}).translate([w*-0.55,l*-0.4,h*0.75]);
+        pig = difference(pig, cutaway);
+    }
+    
+    return pig;
 }
 
 function body(r) {
