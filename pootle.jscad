@@ -1,5 +1,5 @@
 
-// Pootle Piglet Jr. v0.0.4
+// Pootle Piglet Jr. v0.0.5
 
 const DEBUG = true;
 
@@ -18,7 +18,9 @@ function pootle() {
                     head(h/4),
                     tail(h/8),
                     legs(w/2, h/2, legR));
-
+    
+    pig = difference(pig, nano(-w*0.62,-10,h*0.2));
+    
     // take the lid off for debug
     if (DEBUG) {
         let cutaway = cube({size: [w*1.1,l*0.8,h*0.3]}).translate([w*-0.55,l*-0.4,h*0.75]);
@@ -32,11 +34,16 @@ function body(r) {
     let outer = sphere({r: r}).scale([1.25,1,1]).translate([0,0,r]);
     let inner = outer.scale([0.95,0.95,0.95]);
     let access = cylinder({r: r/3, h: h/4, center: false});
-
-    // hard-coded for cable size
-    let hole = cylinder({r: 5, h: 10, center: false}).rotateY(0).translate([-w*0.6,0,h*0.2]);
     
-    return difference(outer, inner, access, hole);
+    return difference(outer, inner, access);
+}
+
+function nano(x,y,z) {
+    // hard-coded for NANO 33 BLE Sense size
+    let outer = cube({size: [50,20,15]}).translate([x,y,z]);
+    let inner = cube({size: [50,10,5]}).translate([x,y+5,z]);
+    
+    return difference(outer, inner);
 }
 
 function head(r) {
