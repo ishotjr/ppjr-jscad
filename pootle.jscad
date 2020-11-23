@@ -1,11 +1,12 @@
 
-// Pootle Piglet Jr. v0.0.5
+// Pootle Piglet Jr. v0.0.6
 
 const DEBUG = true;
 
 var w = 50;
 var l = 60;
 var h = 50;
+var cutH = h*0.737;
 
 var legR = 6;
 
@@ -18,12 +19,19 @@ function pootle() {
                     head(h/4),
                     tail(h/8),
                     legs(w/2, h/2, legR));
+
+
+    // hard-coded 10mm dia magnet
+    let magnet = cylinder({r: 5, h: 2, center: false});
     
-    pig = difference(pig, nano(-w*0.63,-10,h*-0.7));
+    pig = difference(pig, 
+                     nano(-w*0.63,-10,h*-0.7), 
+                     magnet.translate([w*0.45,0,cutH-2]),
+                     magnet.translate([w*-0.42,0,cutH-2]));
     
     // take the lid off for debug
     if (DEBUG) {
-        let cutaway = cube({size: [w*1.5,l*0.8,h*0.3]}).translate([w*-0.55,l*-0.4,h*0.737]);
+        let cutaway = cube({size: [w*1.5,l*0.8,h*0.3]}).translate([w*-0.55,l*-0.4,cutH]);
         pig = difference(pig, cutaway);
     }
     
@@ -32,7 +40,7 @@ function pootle() {
 
 function body(r) {
     let outer = sphere({r: r}).scale([1.25,1,1]).translate([0,0,r]);
-    let inner = outer.scale([0.85,0.95,0.95]);
+    let inner = outer.scale([0.85,0.85,0.85]).translate([0,0,0.15*r]);
     
     return difference(outer, inner);
 }
